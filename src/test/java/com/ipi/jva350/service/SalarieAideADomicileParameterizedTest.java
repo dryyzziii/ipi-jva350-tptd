@@ -14,12 +14,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import com.ipi.jva350.model.SalarieAideADomicile;
 
-public class SalarieAideADomicileParameterizedTest {
+class SalarieAideADomicileParameterizedTest {
 
     private SalarieAideADomicile salarie;
     
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // Initialisation d'un salarié pour les tests
         salarie = new SalarieAideADomicile();
         salarie.setMoisDebutContrat(LocalDate.of(2021, 1, 1));
@@ -123,7 +123,7 @@ public class SalarieAideADomicileParameterizedTest {
     @ParameterizedTest(name = "{3}")
     @MethodSource("joursCongeDécomptésProvider")
     @DisplayName("Test du calcul des jours de congé décomptés")
-    public void testCalculeJoursDeCongeDecomptesPourPlage(
+    void testCalculeJoursDeCongeDecomptesPourPlage(
             LocalDate jourDebut,
             LocalDate jourFin,
             int nbJoursAttendu,
@@ -144,7 +144,7 @@ public class SalarieAideADomicileParameterizedTest {
     @ParameterizedTest(name = "Début le {0}, fin le {1}")
     @MethodSource("joursCongeDécomptésProvider")
     @DisplayName("Test des jours spécifiques décomptés")
-    public void testJoursSpecifiquesDecomptes(
+    void testJoursSpecifiquesDecomptes(
             LocalDate jourDebut,
             LocalDate jourFin,
             int nbJoursAttendu,

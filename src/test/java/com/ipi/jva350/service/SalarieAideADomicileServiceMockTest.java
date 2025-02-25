@@ -19,7 +19,7 @@ import com.ipi.jva350.model.SalarieAideADomicile;
 import com.ipi.jva350.repository.SalarieAideADomicileRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class SalarieAideADomicileServiceMockTest {
+class SalarieAideADomicileServiceMockTest {
 
     @Mock
     private SalarieAideADomicileRepository salarieAideADomicileRepository;
@@ -30,14 +30,14 @@ public class SalarieAideADomicileServiceMockTest {
     private SalarieAideADomicile salarie;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         // Préparation d'un salarié mock
         salarie = mock(SalarieAideADomicile.class);
     }
 
     @Test
     @DisplayName("Exception si le salarié n'a pas droit aux congés payés")
-    public void testAjouteCongeSalarieSansDroit() {
+    void testAjouteCongeSalarieSansDroit() {
         // Arrange
         when(salarie.aLegalementDroitADesCongesPayes()).thenReturn(false);
         LocalDate jourDebut = LocalDate.of(2022, 7, 11);
@@ -54,7 +54,7 @@ public class SalarieAideADomicileServiceMockTest {
 
     @Test
     @DisplayName("Exception si aucun jour n'est décompté")
-    public void testAjouteCongeAucunJourDecompte() {
+    void testAjouteCongeAucunJourDecompte() {
         // Arrange
         when(salarie.aLegalementDroitADesCongesPayes()).thenReturn(true);
         

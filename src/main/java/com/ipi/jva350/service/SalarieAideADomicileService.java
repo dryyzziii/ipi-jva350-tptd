@@ -4,7 +4,6 @@ import com.ipi.jva350.exception.SalarieException;
 import com.ipi.jva350.model.Entreprise;
 import com.ipi.jva350.model.SalarieAideADomicile;
 import com.ipi.jva350.repository.SalarieAideADomicileRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -17,12 +16,10 @@ import java.util.stream.Collectors;
 @Service
 public class SalarieAideADomicileService {  
 
-    @Autowired
-    private SalarieAideADomicileRepository salarieAideADomicileRepository;
+    private final SalarieAideADomicileRepository salarieAideADomicileRepository;
 
-    public SalarieAideADomicileService() {
-        // This constructor is intentionally left empty as the repository is injected 
-        // via @Autowired annotation. No additional initialization is required.
+    public SalarieAideADomicileService(SalarieAideADomicileRepository salarieAideADomicileRepository) {
+        this.salarieAideADomicileRepository = salarieAideADomicileRepository;
     }
 
     /**
@@ -118,7 +115,7 @@ public class SalarieAideADomicileService {
         }
 
         // on vérifie que le congé demandé est dans les mois restants de l'année de congés en cours du salarié :
-        if (joursDecomptes.stream().findFirst().get()
+        if (joursDecomptes.stream().findFirst().isPresent() && joursDecomptes.stream().findFirst().get()
                 .isBefore(salarieAideADomicile.getMoisEnCours())) {
             throw new SalarieException("Pas possible de prendre de congé avant le mois en cours !");
         }
