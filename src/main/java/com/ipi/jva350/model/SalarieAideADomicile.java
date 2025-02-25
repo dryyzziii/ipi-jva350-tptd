@@ -44,32 +44,108 @@ public class SalarieAideADomicile {
     private double congesPayesAcquisAnneeNMoins1 = 0;
     private double congesPayesPrisAnneeNMoins1 = 0;
 
+    /**
+     * Constructeur par défaut pour JPA
+     */
     public SalarieAideADomicile() {
     }
 
     /**
-     * Constructor for SalarieAideADomicile.
-     * @param nom Name of the employee
-     * @param moisDebutContrat Start date of the contract
-     * @param moisEnCours Current month
-     * @param joursTravaillesAnneeN Days worked in year N
-     * @param congesPayesAcquisAnneeN Paid leaves acquired in year N
-     * @param joursTravaillesAnneeNMoins1 Days worked in year N-1
-     * @param congesPayesAcquisAnneeNMoins1 Paid leaves acquired in year N-1
-     * @param congesPayesPrisAnneeNMoins1 Paid leaves taken in year N-1
+     * Constructeur privé utilisé par le Builder
      */
-    public SalarieAideADomicile(String nom, LocalDate moisDebutContrat, LocalDate moisEnCours,
-                                double joursTravaillesAnneeN, double congesPayesAcquisAnneeN,
-                                double joursTravaillesAnneeNMoins1, double congesPayesAcquisAnneeNMoins1, 
-                                double congesPayesPrisAnneeNMoins1) {
-        this.nom = nom;
-        this.moisDebutContrat = moisDebutContrat;
-        this.moisEnCours = moisEnCours;
-        this.joursTravaillesAnneeNMoins1 = joursTravaillesAnneeNMoins1;
-        this.congesPayesAcquisAnneeNMoins1 = congesPayesAcquisAnneeNMoins1;
-        this.congesPayesPrisAnneeNMoins1 = congesPayesPrisAnneeNMoins1;
-        this.joursTravaillesAnneeN = joursTravaillesAnneeN;
-        this.congesPayesAcquisAnneeN = congesPayesAcquisAnneeN;
+    private SalarieAideADomicile(Builder builder) {
+        this.nom = builder.nom;
+        this.moisDebutContrat = builder.moisDebutContrat;
+        this.moisEnCours = builder.moisEnCours;
+        this.joursTravaillesAnneeNMoins1 = builder.joursTravaillesAnneeNMoins1;
+        this.congesPayesAcquisAnneeNMoins1 = builder.congesPayesAcquisAnneeNMoins1;
+        this.congesPayesPrisAnneeNMoins1 = builder.congesPayesPrisAnneeNMoins1;
+        this.joursTravaillesAnneeN = builder.joursTravaillesAnneeN;
+        this.congesPayesAcquisAnneeN = builder.congesPayesAcquisAnneeN;
+    }
+
+    /**
+     * Builder pour SalarieAideADomicile
+     */
+    public static class Builder {
+        private String nom;
+        private LocalDate moisDebutContrat;
+        private LocalDate moisEnCours;
+        private double joursTravaillesAnneeN = 0;
+        private double congesPayesAcquisAnneeN = 0;
+        private double joursTravaillesAnneeNMoins1 = 0;
+        private double congesPayesAcquisAnneeNMoins1 = 0;
+        private double congesPayesPrisAnneeNMoins1 = 0;
+
+        /**
+         * Constructeur du Builder avec les paramètres obligatoires
+         * @param nom Nom du salarié
+         * @param moisDebutContrat Date de début du contrat
+         * @param moisEnCours Mois en cours
+         */
+        public Builder(String nom, LocalDate moisDebutContrat, LocalDate moisEnCours) {
+            this.nom = nom;
+            this.moisDebutContrat = moisDebutContrat;
+            this.moisEnCours = moisEnCours;
+        }
+
+        /**
+         * Définit les jours travaillés en année N
+         * @param joursTravaillesAnneeN Jours travaillés en année N
+         * @return Builder
+         */
+        public Builder joursTravaillesAnneeN(double joursTravaillesAnneeN) {
+            this.joursTravaillesAnneeN = joursTravaillesAnneeN;
+            return this;
+        }
+
+        /**
+         * Définit les congés payés acquis en année N
+         * @param congesPayesAcquisAnneeN Congés payés acquis en année N
+         * @return Builder
+         */
+        public Builder congesPayesAcquisAnneeN(double congesPayesAcquisAnneeN) {
+            this.congesPayesAcquisAnneeN = congesPayesAcquisAnneeN;
+            return this;
+        }
+
+        /**
+         * Définit les jours travaillés en année N-1
+         * @param joursTravaillesAnneeNMoins1 Jours travaillés en année N-1
+         * @return Builder
+         */
+        public Builder joursTravaillesAnneeNMoins1(double joursTravaillesAnneeNMoins1) {
+            this.joursTravaillesAnneeNMoins1 = joursTravaillesAnneeNMoins1;
+            return this;
+        }
+
+        /**
+         * Définit les congés payés acquis en année N-1
+         * @param congesPayesAcquisAnneeNMoins1 Congés payés acquis en année N-1
+         * @return Builder
+         */
+        public Builder congesPayesAcquisAnneeNMoins1(double congesPayesAcquisAnneeNMoins1) {
+            this.congesPayesAcquisAnneeNMoins1 = congesPayesAcquisAnneeNMoins1;
+            return this;
+        }
+
+        /**
+         * Définit les congés payés pris en année N-1
+         * @param congesPayesPrisAnneeNMoins1 Congés payés pris en année N-1
+         * @return Builder
+         */
+        public Builder congesPayesPrisAnneeNMoins1(double congesPayesPrisAnneeNMoins1) {
+            this.congesPayesPrisAnneeNMoins1 = congesPayesPrisAnneeNMoins1;
+            return this;
+        }
+
+        /**
+         * Construit l'instance SalarieAideADomicile
+         * @return instance de SalarieAideADomicile
+         */
+        public SalarieAideADomicile build() {
+            return new SalarieAideADomicile(this);
+        }
     }
 
     /**
@@ -171,6 +247,8 @@ public class SalarieAideADomicile {
         return joursHabituellementTravailles.contains(jour.getDayOfWeek());
     }
 
+    // Getters et setters inchangés...
+    
     public Long getId() {
         return id;
     }
