@@ -15,7 +15,7 @@ import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
 
 @Service
-public class SalarieAideADomicileService {
+public class SalarieAideADomicileService {  
 
     @Autowired
     private SalarieAideADomicileRepository salarieAideADomicileRepository;
@@ -168,7 +168,7 @@ public class SalarieAideADomicileService {
         salarieAideADomicile.setJoursTravaillesAnneeN(salarieAideADomicile.getJoursTravaillesAnneeN() + joursTravailles);
 
         salarieAideADomicile.setCongesPayesAcquisAnneeN(salarieAideADomicile.getCongesPayesAcquisAnneeN()
-                + salarieAideADomicile.CONGES_PAYES_ACQUIS_PAR_MOIS);
+                + SalarieAideADomicile.CONGES_PAYES_ACQUIS_PAR_MOIS);
 
         salarieAideADomicile.setMoisEnCours(salarieAideADomicile.getMoisEnCours().plusMonths(1));
 

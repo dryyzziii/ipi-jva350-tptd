@@ -1,0 +1,13 @@
+Il y a un total de 30 problèmes identifiés (visible en haut à droite "30 issues"), représentant environ 3h 37min d'effort estimé pour les corriger.
+Les problèmes sont principalement liés à la maintenabilité du code (tag "Maintainability" visible sur plusieurs alertes).
+On observe 29 problèmes de maintenabilité, 1 problème de sécurité "High", 11 problèmes "Medium" et 18 problèmes "Low".
+Parmi les problèmes spécifiques identifiés :
+
+Commentaires "TODO" à compléter
+Déclarations if-then-else qui pourraient être simplifiées avec un return unique
+Opérations ternaires imbriquées qui devraient être extraites
+Utilisation recommandée de l'opérateur "<=" au lieu d'un autre opérateur
+Paramètres de méthode non utilisés à supprimer ("id", "debug", "fin")
+Besoin de définir des exceptions dédiées plutôt que des exceptions génériques
+Problèmes de typage générique non spécifié
+Référence à une méthode plutôt qu'utilisation d'une expression lambda
