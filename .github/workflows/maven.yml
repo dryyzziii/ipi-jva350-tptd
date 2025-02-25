@@ -42,4 +42,4 @@ jobs:
       - name: SonarQubeScan
         uses: SonarSource/sonarqube-scan-action@v4
         env: 
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ vars.SONAR_TOKEN }}
