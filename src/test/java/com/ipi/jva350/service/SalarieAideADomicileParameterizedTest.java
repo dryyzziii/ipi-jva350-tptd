@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDate;
 import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -130,7 +131,7 @@ class SalarieAideADomicileParameterizedTest {
             String description) {
         
         // Act
-        LinkedHashSet<LocalDate> joursDecomptes = salarie.calculeJoursDeCongeDecomptesPourPlage(jourDebut, jourFin);
+        Set<LocalDate> joursDecomptes = salarie.calculeJoursDeCongeDecomptesPourPlage(jourDebut, jourFin);
         
         // Assert
         assertEquals(nbJoursAttendu, joursDecomptes.size(),
@@ -156,7 +157,7 @@ class SalarieAideADomicileParameterizedTest {
         }
         
         // Act
-        LinkedHashSet<LocalDate> joursDecomptes = salarie.calculeJoursDeCongeDecomptesPourPlage(jourDebut, jourFin);
+        Set<LocalDate> joursDecomptes = salarie.calculeJoursDeCongeDecomptesPourPlage(jourDebut, jourFin);
         
         // Ne pas faire de vérifications trop strictes sur les dates exactes, car l'implémentation
         // peut générer des dates en dehors de l'intervalle demandé selon la logique métier
