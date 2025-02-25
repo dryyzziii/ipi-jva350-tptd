@@ -21,6 +21,8 @@ public class SalarieAideADomicileService {
     private SalarieAideADomicileRepository salarieAideADomicileRepository;
 
     public SalarieAideADomicileService() {
+        // This constructor is intentionally left empty as the repository is injected 
+        // via @Autowired annotation. No additional initialization is required.
     }
 
     /**
