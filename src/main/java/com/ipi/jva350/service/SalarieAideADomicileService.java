@@ -130,7 +130,7 @@ public class SalarieAideADomicileService {
         Set<LocalDate> joursDecomptes = salarieAideADomicile
                 .calculeJoursDeCongeDecomptesPourPlage(jourDebut, jourFin);
 
-        if (joursDecomptes.isEmpty()) {
+        if (joursDecomptes.size() == 0) {
             throw new SalarieException("Pas besoin de congés !");
         }
 
@@ -139,26 +139,17 @@ public class SalarieAideADomicileService {
                 && premierJourDecompte.get().isBefore(salarieAideADomicile.getMoisEnCours())) {
             throw new SalarieException("Pas possible de prendre de congé avant le mois en cours !");
         }
-
-        LocalDate finAnneeCongeCourante = LocalDate.of(
-                Entreprise.getPremierJourAnneeDeConges(salarieAideADomicile.getMoisEnCours()).getYear() + 1, 5, 31);
-
-        Set<LocalDate> congesPayesPrisDecomptesAnneeN = joursDecomptes.stream()
-                .filter(d -> !d.isAfter(finAnneeCongeCourante))
-                .collect(Collectors.toCollection(LinkedHashSet::new));
-
+        Set<LocalDate> congesPayesPrisDecomptesAnneeN = new LinkedHashSet<>(joursDecomptes.stream()
+                .filter(d -> !d.isAfter(LocalDate.of(Entreprise.getPremierJourAnneeDeConges(
+                        salarieAideADomicile.getMoisEnCours()).getYear() + 1, 5, 31)))
+                .collect(Collectors.toList()));
         int nbCongesPayesPrisDecomptesAnneeN = congesPayesPrisDecomptesAnneeN.size();
-
-        // Vérifier si on prend trop de congés dans l'année suivante
         if (joursDecomptes.size() > nbCongesPayesPrisDecomptesAnneeN + 1) {
-            // NB. 1 jour dans la nouvelle année est toujours toléré, pour résoudre le cas
-            // d'un congé devant se finir un
+            // NB. 1 jour dans la nouvelle année est toujours toléré, pour résoudre le cas d'un congé devant se finir un
             // samedi le premier jour de la nouvelle année de congés...
-            throw new SalarieException(
-                    "Pas possible de prendre de congé dans l'année de congés suivante (hors le premier jour)");
+            throw new SalarieException("Pas possible de prendre de congé dans l'année de congés suivante (hors le premier jour)");
         }
 
-        // Vérifier si on dépasse les congés disponibles
         if (nbCongesPayesPrisDecomptesAnneeN > salarieAideADomicile.getCongesPayesRestantAnneeNMoins1()) {
             throw new SalarieException("Conges Payes Pris Decomptes (" + nbCongesPayesPrisDecomptesAnneeN
                     + ") dépassent les congés acquis en année N-1 : "
@@ -170,18 +161,14 @@ public class SalarieAideADomicileService {
                 salarieAideADomicile.getCongesPayesAcquisAnneeNMoins1(),
                 salarieAideADomicile.getMoisDebutContrat(),
                 jourDebut, jourFin);
-
-        // La condition était inversée! Il fallait vérifier si le nombre de congés pris
-        // dépasse la limite
         if (nbCongesPayesPrisDecomptesAnneeN > limiteEntreprise) {
             throw new SalarieException("Conges Payes Pris Decomptes (" + nbCongesPayesPrisDecomptesAnneeN
                     + ") dépassent la limite des règles de l'entreprise : " + limiteEntreprise);
         }
 
-        // Enregistrer les congés
         salarieAideADomicile.getCongesPayesPris().addAll(joursDecomptes);
-        salarieAideADomicile.setCongesPayesPrisAnneeNMoins1(
-                salarieAideADomicile.getCongesPayesPrisAnneeNMoins1() + nbCongesPayesPrisDecomptesAnneeN);
+        salarieAideADomicile.setCongesPayesPrisAnneeNMoins1(nbCongesPayesPrisDecomptesAnneeN);
+
         salarieAideADomicileRepository.save(salarieAideADomicile);
     }
 

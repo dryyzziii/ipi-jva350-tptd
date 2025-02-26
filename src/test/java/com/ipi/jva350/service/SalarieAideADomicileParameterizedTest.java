@@ -21,7 +21,7 @@ class SalarieAideADomicileParameterizedTest {
     
     @BeforeEach
     void setUp() {
-        // Initialisation d'un salarié pour les tests
+        // GIVEN (Arrange) : Initialisation d'un salarié pour les tests
         salarie = new SalarieAideADomicile();
         salarie.setMoisDebutContrat(LocalDate.of(2021, 1, 1));
         salarie.setMoisEnCours(LocalDate.of(2022, 7, 1));
@@ -35,11 +35,11 @@ class SalarieAideADomicileParameterizedTest {
      * - date de début de congé
      * - date de fin de congé
      * - nombre de jours ouvrables décomptés attendus
-     * - description du test
+     * - description du testt
      */
     static Stream<Arguments> joursCongeDécomptésProvider() {
         return Stream.of(
-            // Cas 1: Weekend uniquement (Samedi est ouvrable mais dimanche non)
+            // Cas 1: Weekend uniquement (Samedi es ouvrable mais dimanche non)
             Arguments.of(
                 LocalDate.parse("2022-07-02"), // Samedi
                 LocalDate.parse("2022-07-03"), // Dimanche
@@ -99,7 +99,7 @@ class SalarieAideADomicileParameterizedTest {
             Arguments.of(
                 LocalDate.parse("2022-08-01"), // Lundi
                 LocalDate.parse("2022-08-14"), // Dimanche (2 semaines)
-                12, // (lundi-samedi) x 2
+                12, 
                 "Période de 2 semaines"
             ),
             
@@ -115,13 +115,13 @@ class SalarieAideADomicileParameterizedTest {
             Arguments.of(
                 LocalDate.parse("2022-07-26"), // Mardi
                 LocalDate.parse("2022-07-29"), // Vendredi
-                5, // D'après l'erreur, c'est 5 et non 4
+                5, 
                 "Congé normal après d'autres congés"
             )
         );
     }
     
-    @ParameterizedTest(name = "{3}")
+    @ParameterizedTest(name = "{3} Début le {0}, fin le {1}")
     @MethodSource("joursCongeDécomptésProvider")
     @DisplayName("Test du calcul des jours de congé décomptés")
     void testCalculeJoursDeCongeDecomptesPourPlage(
@@ -130,10 +130,10 @@ class SalarieAideADomicileParameterizedTest {
             int nbJoursAttendu,
             String description) {
         
-        // Act
+        // WHEN (Act) : Appel de la méthode à tester avec les paramètres fournis
         Set<LocalDate> joursDecomptes = salarie.calculeJoursDeCongeDecomptesPourPlage(jourDebut, jourFin);
         
-        // Assert
+        // THEN (Assert) : Vérification du nombre correct de jours décomptés
         assertEquals(nbJoursAttendu, joursDecomptes.size(),
                 "Le nombre de jours décomptés devrait être " + nbJoursAttendu + " pour " + description);
         
@@ -151,17 +151,19 @@ class SalarieAideADomicileParameterizedTest {
             int nbJoursAttendu,
             String description) {
         
+        // GIVEN (Arrange) : Vérification préalable de la cohérence des dates
         // Si le test est pour des dates inversées, aucune vérification supplémentaire nécessaire
         if (jourDebut.isAfter(jourFin)) {
             return;
         }
         
-        // Act
+        // WHEN (Act) : Appel de la méthode à tester
         Set<LocalDate> joursDecomptes = salarie.calculeJoursDeCongeDecomptesPourPlage(jourDebut, jourFin);
         
         // Ne pas faire de vérifications trop strictes sur les dates exactes, car l'implémentation
         // peut générer des dates en dehors de l'intervalle demandé selon la logique métier
         
+        // THEN (Assert) : Vérification que tous les jours décomptés sont des jours ouvrables
         // Vérifier que tous les jours décomptés sont des jours ouvrables (lundi-samedi)
         joursDecomptes.forEach(jour -> {
             int dayOfWeek = jour.getDayOfWeek().getValue();
