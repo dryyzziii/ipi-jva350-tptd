@@ -123,7 +123,10 @@ class SalarieAideADomicileTest {
     public void testAjouteCongeImpossibleAvantMoisEnCours() {
         // GIVEN (Arrange) : Préparation d'un congé avec dates avant le mois en cours
         try {
-            salarieService.creerSalarieAideADomicile(salarie);
+            if (salarie.getId() == null) {
+                salarieService.creerSalarieAideADomicile(salarie);
+            }
+
             LocalDate jourDebut = LocalDate.of(2022, 4, 1); // Avant le mois en cours (mai 2022)
             LocalDate jourFin = LocalDate.of(2022, 4, 5);
 
@@ -142,10 +145,9 @@ class SalarieAideADomicileTest {
     @Test
     public void testAjouteCongeImpossibleSansAssezDeJoursTravailles() {
         // GIVEN (Arrange) : Préparation d'un salarié sans droit aux congés (moins de 10
-        // jours travaillés)
-        salarie.setJoursTravaillesAnneeNMoins1(5.0); // Moins de 10 jours, pas droit aux congés
-
         try {
+            // jours travaillés)
+            salarie.setJoursTravaillesAnneeNMoins1(5.0); // Moins de 10 jours, pas droit aux congés
             salarieService.creerSalarieAideADomicile(salarie);
             LocalDate jourDebut = LocalDate.of(2022, 6, 1);
             LocalDate jourFin = LocalDate.of(2022, 6, 3);
@@ -161,7 +163,7 @@ class SalarieAideADomicileTest {
                     "Le message d'erreur devrait indiquer que le salarié n'a pas droit aux congés");
         }
     }
-    
+
     // Source de données pour le test paramétré
     static Stream<Arguments> joursTravaillesProvider() {
         return Stream.of(
