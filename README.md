@@ -181,4 +181,45 @@ fichier ne dépasse pas 1 MO.
 - BONUS : Créez une petite documentation statique en utilisant MkDocs.
 - Rédigez **ci-dessous** une courte analyse du rapport produit par Sonar (métriques, évolution, état général...) :
 
-Le rapport Sonar final indique...
+# Analyse du rapport Sonarqube
+
+## 📊 Métriques principales
+
+- **Couverture de code**: 78.1% 🟠 (objectif: 80%)
+- **Duplication de code**: 1.7% ✅ (limite: 3.0%)
+- **Problèmes de sécurité**: 0 ✅ (aucun hotspot détecté)
+- **Problèmes nouveaux**: 0 ✅
+- **Problèmes acceptés**: 0 ✅
+
+## 🔍 Analyse détaillée
+
+### Points forts ✅
+
+1. **Faible duplication de code (1.7%)** - Bien en-dessous du seuil critique de 3.0%, démontrant une architecture bien pensée sans redondances.
+
+2. **Sécurité optimale** - Absence totale de vulnérabilités, renforçant la robustesse de l'application.
+
+3. **Développement stable** - Aucun nouveau problème introduit récemment, témoignant d'une bonne discipline de développement.
+
+### Points à améliorer 🔧
+
+La **couverture de code (78.1%)** reste le principal défi, avec un écart de 1.9% par rapport à l'objectif fixé. Le rapport indique qu'il reste **96 lignes** à couvrir pour satisfaire le critère de qualité.
+
+## 📝 Recommandations
+
+1. **Augmenter la couverture de tests**:
+   - Cibler les 96 lignes non couvertes
+   - Priorité aux méthodes du Builder dans `SalarieAideADomicile`
+   - Ajouter des tests pour les cas limites dans `Entreprise.bissextile()` et `Entreprise.estJourFerie()`
+
+2. **Maintenir les standards actuels**:
+   - Continuer à appliquer les pratiques qui ont permis d'éviter les duplications
+   - Conserver l'approche de développement sécurisé
+
+3. **Institutionnaliser les bonnes pratiques**:
+   - Mettre en place des revues de code systématiques
+   - Intégrer SonarQube dans le processus CI/CD
+
+## 🏁 Conclusion
+
+Le projet est **globalement en bonne santé** avec seulement un léger écart concernant la couverture de code. Les refactorisations effectuées (notamment pour `proportionPondereeDuMois()`) ont porté leurs fruits, comme en témoigne le faible taux de duplication. Avec quelques tests supplémentaires ciblés, tous les objectifs de qualité devraient être atteints.
