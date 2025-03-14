@@ -163,5 +163,6 @@ public final class Entreprise {
 
         return !date.isBefore(debut) && !date.isAfter(fin);
     }
+    
 
 }
