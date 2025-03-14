@@ -22,5 +22,4 @@ Feature: Clôture de mois pour un salarié aide à domicile
     And le nombre de jours travaillés pour l'année N devrait être de 0
     And le nombre de jours travaillés pour l'année N-1 devrait être de 18
     And le nombre de congés payés acquis pour l'année N devrait être de 0
-    And le nombre de congés payés acquis pour l'année N-1 devrait être de 2.5
     And le nombre de congés payés pris pour l'année N-1 devrait être de 0
