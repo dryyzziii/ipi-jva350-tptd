@@ -46,7 +46,7 @@ class SalarieAideADomicileTest {
     }
 
     @Test
-    public void testAjouteConge() throws SalarieException {
+    void testAjouteConge() throws SalarieException {
         // GIVEN (Arrange) : Création du salarié avec des paramètres appropriés
         salarie.setMoisEnCours(LocalDate.of(2022, 6, 1)); // Set the current month to June 1, 2022
         salarie.setCongesPayesAcquisAnneeNMoins1(25.0); // Ensure the employee has enough vacation days from previous
@@ -89,7 +89,7 @@ class SalarieAideADomicileTest {
     }
 
     @Test
-    public void testAjouteCongeAvecDepartWeekEnd() throws SalarieException {
+    void testAjouteCongeAvecDepartWeekEnd() throws SalarieException {
         // GIVEN (Arrange) : Création du salarié en base et définition des dates de
         // congé commençant un weekend
         salarieService.creerSalarieAideADomicile(salarie);
@@ -120,48 +120,44 @@ class SalarieAideADomicileTest {
     }
 
     @Test
-    public void testAjouteCongeImpossibleAvantMoisEnCours() {
+    void testAjouteCongeImpossibleAvantMoisEnCours() throws SalarieException {
         // GIVEN (Arrange) : Préparation d'un congé avec dates avant le mois en cours
-        try {
-            if (salarie.getId() == null) {
-                salarieService.creerSalarieAideADomicile(salarie);
-            }
-
-            LocalDate jourDebut = LocalDate.of(2022, 4, 1); // Avant le mois en cours (mai 2022)
-            LocalDate jourFin = LocalDate.of(2022, 4, 5);
-
-            // WHEN (Act) : Tentative d'ajout de congé avant le mois en cours
-            salarieService.ajouteConge(salarie, jourDebut, jourFin);
-
-            // Si on arrive ici, le test échoue
-            fail("Une exception aurait dû être levée pour des congés avant le mois en cours");
-        } catch (SalarieException e) {
-            // THEN (Assert) : Vérification que l'exception contient le bon message
-            assertTrue(e.getMessage().contains("avant le mois en cours"),
-                    "Le message d'erreur devrait indiquer que les congés sont avant le mois en cours");
+        if (salarie.getId() == null) {
+            salarieService.creerSalarieAideADomicile(salarie);
         }
+
+        LocalDate jourDebut = LocalDate.of(2022, 4, 1); // Avant le mois en cours (mai 2022)
+        LocalDate jourFin = LocalDate.of(2022, 4, 5);
+
+        // WHEN & THEN (Act & Assert) : Vérification que l'exception est levée avec le
+        // bon message
+        SalarieException exception = assertThrows(SalarieException.class, () -> {
+            salarieService.ajouteConge(salarie, jourDebut, jourFin);
+        });
+
+        // Vérification du message d'erreur
+        assertTrue(exception.getMessage().contains("avant le mois en cours"),
+                "Le message d'erreur devrait indiquer que les congés sont avant le mois en cours");
     }
 
     @Test
-    public void testAjouteCongeImpossibleSansAssezDeJoursTravailles() {
+    void testAjouteCongeImpossibleSansAssezDeJoursTravailles() throws SalarieException {
         // GIVEN (Arrange) : Préparation d'un salarié sans droit aux congés (moins de 10
-        try {
-            // jours travaillés)
-            salarie.setJoursTravaillesAnneeNMoins1(5.0); // Moins de 10 jours, pas droit aux congés
-            salarieService.creerSalarieAideADomicile(salarie);
-            LocalDate jourDebut = LocalDate.of(2022, 6, 1);
-            LocalDate jourFin = LocalDate.of(2022, 6, 3);
+        // jours travaillés)
+        salarie.setJoursTravaillesAnneeNMoins1(5.0); // Moins de 10 jours, pas droit aux congés
+        salarieService.creerSalarieAideADomicile(salarie);
+        LocalDate jourDebut = LocalDate.of(2022, 6, 1);
+        LocalDate jourFin = LocalDate.of(2022, 6, 3);
 
-            // WHEN (Act) : Tentative d'ajout de congé pour un salarié sans droit
+        // WHEN & THEN (Act & Assert) : Vérification que l'exception est levée avec le
+        // bon message
+        SalarieException exception = assertThrows(SalarieException.class, () -> {
             salarieService.ajouteConge(salarie, jourDebut, jourFin);
+        });
 
-            // Si on arrive ici, le test échoue
-            fail("Une exception aurait dû être levée pour un salarié sans droit aux congés");
-        } catch (SalarieException e) {
-            // THEN (Assert) : Vérification que l'exception contient le bon message
-            assertTrue(e.getMessage().contains("droit à des congés"),
-                    "Le message d'erreur devrait indiquer que le salarié n'a pas droit aux congés");
-        }
+        // Vérification du message d'erreur
+        assertTrue(exception.getMessage().contains("droit à des congés"),
+                "Le message d'erreur devrait indiquer que le salarié n'a pas droit aux congés");
     }
 
     // Source de données pour le test paramétré

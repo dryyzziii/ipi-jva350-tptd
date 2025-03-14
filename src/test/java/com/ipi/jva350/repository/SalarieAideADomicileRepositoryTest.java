@@ -11,13 +11,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import com.ipi.jva350.model.SalarieAideADomicile;
 
 @DataJpaTest
-public class SalarieAideADomicileRepositoryTest {
+class SalarieAideADomicileRepositoryTest {
 
     @Autowired
     private SalarieAideADomicileRepository salarieRepo;
 
     @Test
-    public void testFindByNom() {
+    void testFindByNom() {
         // Arrange
         String nomSalarie = "Dupont";
         SalarieAideADomicile salarie = new SalarieAideADomicile();
@@ -37,7 +37,7 @@ public class SalarieAideADomicileRepositoryTest {
     }
     
     @Test
-    public void testFindByNomInexistant() {
+    void testFindByNomInexistant() {
         // Act
         SalarieAideADomicile trouve = salarieRepo.findByNom("NomInexistant");
         
@@ -46,7 +46,7 @@ public class SalarieAideADomicileRepositoryTest {
     }
     
     @Test
-    public void testFindByNomAvecPlusieursSalaries() {
+    void testFindByNomAvecPlusieursSalaries() {
         // Arrange
         String nomSalarie1 = "Dupont";
         String nomSalarie2 = "Martin";
