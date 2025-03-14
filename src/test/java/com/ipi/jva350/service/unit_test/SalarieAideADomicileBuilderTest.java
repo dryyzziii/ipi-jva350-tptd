@@ -8,7 +8,7 @@ import com.ipi.jva350.model.SalarieAideADomicile;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SalarieAideADomicileBuilderTest {
+class SalarieAideADomicileBuilderTest {
      @Test
     @DisplayName("Test des méthodes du Builder pour les paramètres de l'année N")
     void testBuilderMethodesAnneeN() {
