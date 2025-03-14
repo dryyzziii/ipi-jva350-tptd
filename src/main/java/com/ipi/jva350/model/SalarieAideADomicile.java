@@ -79,9 +79,10 @@ public class SalarieAideADomicile {
 
         /**
          * Constructeur du Builder avec les paramètres obligatoires
-         * @param nom Nom du salarié
+         * 
+         * @param nom              Nom du salarié
          * @param moisDebutContrat Date de début du contrat
-         * @param moisEnCours Mois en cours
+         * @param moisEnCours      Mois en cours
          */
         public Builder(String nom, LocalDate moisDebutContrat, LocalDate moisEnCours) {
             this.nom = nom;
@@ -91,6 +92,7 @@ public class SalarieAideADomicile {
 
         /**
          * Définit les jours travaillés en année N
+         * 
          * @param joursTravaillesAnneeN Jours travaillés en année N
          * @return Builder
          */
@@ -101,6 +103,7 @@ public class SalarieAideADomicile {
 
         /**
          * Définit les congés payés acquis en année N
+         * 
          * @param congesPayesAcquisAnneeN Congés payés acquis en année N
          * @return Builder
          */
@@ -111,6 +114,7 @@ public class SalarieAideADomicile {
 
         /**
          * Définit les jours travaillés en année N-1
+         * 
          * @param joursTravaillesAnneeNMoins1 Jours travaillés en année N-1
          * @return Builder
          */
@@ -121,6 +125,7 @@ public class SalarieAideADomicile {
 
         /**
          * Définit les congés payés acquis en année N-1
+         * 
          * @param congesPayesAcquisAnneeNMoins1 Congés payés acquis en année N-1
          * @return Builder
          */
@@ -131,6 +136,7 @@ public class SalarieAideADomicile {
 
         /**
          * Définit les congés payés pris en année N-1
+         * 
          * @param congesPayesPrisAnneeNMoins1 Congés payés pris en année N-1
          * @return Builder
          */
@@ -141,6 +147,7 @@ public class SalarieAideADomicile {
 
         /**
          * Construit l'instance SalarieAideADomicile
+         * 
          * @return instance de SalarieAideADomicile
          */
         public SalarieAideADomicile build() {
@@ -150,6 +157,7 @@ public class SalarieAideADomicile {
 
     /**
      * Get the first day of the leave year based on the given date.
+     * 
      * @param d Date to calculate from
      * @return First day of the leave year
      */
@@ -157,37 +165,59 @@ public class SalarieAideADomicile {
         if (d == null) {
             return null;
         }
-        
+
         int month = d.getMonthValue();
         LocalDate firstDayOfYear;
-        
+
         if (month >= 6) {
             firstDayOfYear = LocalDate.of(d.getYear(), 6, 1);
         } else {
             firstDayOfYear = LocalDate.of(d.getYear() - 1, 6, 1);
         }
-        
+
         return firstDayOfYear;
     }
 
     /**
-     * Check if a date is within a specific range.
-     * @param date Date to check
-     * @return true if the date is within the range, false otherwise
-     * @throws UnsupportedOperationException This method is not implemented yet
+     * Vérifie si une date donnée est dans la plage de l'année de congés en cours.
+     * Pour cette implémentation, nous considérons qu'une date est dans la plage
+     * si elle fait partie de l'année de congés en cours (du 1er juin au 31 mai
+     * suivant).
+     * 
+     * @param date Date à vérifier
+     * @return true si la date est dans l'année de congés en cours, false sinon
      */
-    public static boolean estDansPlage(LocalDate date) {
-        throw new UnsupportedOperationException("Cette méthode n'est pas encore implémentée");
+    public boolean estDansPlage(LocalDate date) {
+        if (date == null) {
+            return false;
+        }
+
+        // Récupérer le premier jour de l'année de congés en cours
+        LocalDate debutAnneeConges = getPremierJourAnneeDeConges(this.moisEnCours);
+
+        // L'année de congés se termine le 31 mai de l'année suivante
+        LocalDate finAnneeConges = LocalDate.of(debutAnneeConges.getYear() + 1, 5, 31);
+
+        // Utiliser la méthode statique Entreprise.estDansPlage pour vérifier si la date
+        // est dans l'intervalle
+        return Entreprise.estDansPlage(date, debutAnneeConges, finAnneeConges);
     }
 
     /**
-     * D'après https://femme-de-menage.ooreka.fr/comprendre/conges-payes-femme-de-menage :
-     * Pour s'ouvrir des droits à congés payés – capitalisation de jours + prise et/ou paiement – l'aide ménagère doit avoir travaillé pour le particulier employeur :
-     *     pendant au moins dix jours (pas forcément de suite) ;
-     *     à l'intérieur d'une période de temps – dite de « référence » – allant du 1er juin de l'année N au 31 mai de l'année N - 1.
-     * NB. on considère que la précédente ligne est correcte d'un point de vue des spécifications métier
+     * D'après
+     * https://femme-de-menage.ooreka.fr/comprendre/conges-payes-femme-de-menage :
+     * Pour s'ouvrir des droits à congés payés – capitalisation de jours + prise
+     * et/ou paiement – l'aide ménagère doit avoir travaillé pour le particulier
+     * employeur :
+     * pendant au moins dix jours (pas forcément de suite) ;
+     * à l'intérieur d'une période de temps – dite de « référence » – allant du 1er
+     * juin de l'année N au 31 mai de l'année N - 1.
+     * NB. on considère que la précédente ligne est correcte d'un point de vue des
+     * spécifications métier
      * bien que l'originale dans le lien dit "N+1" au lieu de "N-1"
-     * @return true if the employee is legally entitled to paid leave, false otherwise
+     * 
+     * @return true if the employee is legally entitled to paid leave, false
+     *         otherwise
      */
     public boolean aLegalementDroitADesCongesPayes() {
         return this.getJoursTravaillesAnneeNMoins1() > 10;
@@ -195,8 +225,9 @@ public class SalarieAideADomicile {
 
     /**
      * Calculate the days of leave counted for a time range.
+     * 
      * @param dateDebut Start date
-     * @param dateFin End date
+     * @param dateFin   End date
      * @return Set of dates representing days of leave counted, ordered
      */
     public Set<LocalDate> calculeJoursDeCongeDecomptesPourPlage(LocalDate dateDebut, LocalDate dateFin) {
@@ -209,17 +240,16 @@ public class SalarieAideADomicile {
         LocalDate dernierJourDeCongePris = this.getCongesPayesPris().isEmpty() ? null
                 : this.getCongesPayesPris().stream().reduce((first, second) -> second).get();
 
-        dateDebut = (dernierJourDeCongePris == null || dernierJourDeCongePris.isAfter(dateDebut)) ?
-                dateDebut : dateDebut.plusDays(1);
+        dateDebut = (dernierJourDeCongePris == null || dernierJourDeCongePris.isAfter(dateDebut)) ? dateDebut
+                : dateDebut.plusDays(1);
 
         LocalDate jour = dateDebut;
         if (dateDebut.getDayOfWeek().getValue() != DayOfWeek.SUNDAY.getValue()
-                    && !Entreprise.estJourFerie(dateDebut) && estHabituellementTravaille(dateDebut)) {
+                && !Entreprise.estJourFerie(dateDebut) && estHabituellementTravaille(dateDebut)) {
             joursDeCongeDecomptes.add(dateDebut);
         }
-        for (jour = jour.plusDays(1) ; jour.minusDays(1).isBefore(dateFin)
-                || (!estHabituellementTravaille(jour) && estJourOuvrable(jour));
-             jour = jour.plusDays(1)) {
+        for (jour = jour.plusDays(1); jour.minusDays(1).isBefore(dateFin)
+                || (!estHabituellementTravaille(jour) && estJourOuvrable(jour)); jour = jour.plusDays(1)) {
             if (jour.getDayOfWeek().getValue() != DayOfWeek.SUNDAY.getValue()
                     && !Entreprise.estJourFerie(jour)) {
                 joursDeCongeDecomptes.add(jour);
@@ -227,9 +257,10 @@ public class SalarieAideADomicile {
         }
         return joursDeCongeDecomptes;
     }
-    
+
     /**
      * Check if a day is a working day (not Sunday and not a holiday).
+     * 
      * @param jour Day to check
      * @return true if it's a working day, false otherwise
      */
@@ -237,9 +268,10 @@ public class SalarieAideADomicile {
         return jour.getDayOfWeek().getValue() != DayOfWeek.SUNDAY.getValue()
                 && !Entreprise.estJourFerie(jour);
     }
-    
+
     /**
      * Check if a day is usually worked.
+     * 
      * @param jour Day to check
      * @return true if it's usually worked, false otherwise
      */
@@ -248,7 +280,7 @@ public class SalarieAideADomicile {
     }
 
     // Getters et setters inchangés...
-    
+
     public Long getId() {
         return id;
     }
@@ -339,11 +371,13 @@ public class SalarieAideADomicile {
     public void setMoisDebutContrat(LocalDate moisDebutContrat) {
         this.moisDebutContrat = moisDebutContrat;
     }
-    
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SalarieAideADomicile)) return false;
+        if (this == o)
+            return true;
+        if (!(o instanceof SalarieAideADomicile))
+            return false;
         SalarieAideADomicile s = (SalarieAideADomicile) o;
         return Objects.equals(id, s.id) &&
                 Objects.equals(nom, s.nom);
