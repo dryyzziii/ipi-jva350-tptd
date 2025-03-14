@@ -188,12 +188,18 @@ public class SalarieAideADomicile {
      * @return true si la date est dans l'année de congés en cours, false sinon
      */
     public boolean estDansPlage(LocalDate date) {
-        if (date == null) {
+        if (date == null || this.moisEnCours == null) {
             return false;
         }
 
         // Récupérer le premier jour de l'année de congés en cours
         LocalDate debutAnneeConges = getPremierJourAnneeDeConges(this.moisEnCours);
+
+        // Vérifier si debutAnneeConges est null (cas où moisEnCours serait mal
+        // initialisé)
+        if (debutAnneeConges == null) {
+            return false;
+        }
 
         // L'année de congés se termine le 31 mai de l'année suivante
         LocalDate finAnneeConges = LocalDate.of(debutAnneeConges.getYear() + 1, 5, 31);

@@ -84,42 +84,30 @@ public final class Entreprise {
     }
 
     public static double proportionPondereeDuMois(LocalDate moisDuConge) {
+        if (moisDuConge == null) {
+            return 0.0;
+        }
+    
+        // Transforme le mois (1-12) en indice de saison (1-12, avec 1=juin)
+        int moisIndice = 1 + (moisDuConge.getMonthValue() + 6) % 12;
+        
+        // Calcul direct sans conditionnelles multiples
+        // Base: 8 points
+        // Juillet et août (mois 2-3): +20 points chacun
+        // Autres mois (4-12): +8 points chacun
         int proportionPonderee = 8;
-        int mois = 1 + (moisDuConge.getMonthValue() + 6) % 12;
-        if (mois >= 2) {
-            proportionPonderee += 20;
+        
+        // Ajoute les points spécifiques pour juillet et août
+        if (moisIndice >= 2) {
+            proportionPonderee += (moisIndice >= 3) ? 40 : 20;
         }
-        if (mois >= 3) {
-            proportionPonderee += 20;
+        
+        // Ajoute 8 points pour chaque mois après août
+        if (moisIndice >= 4) {
+            proportionPonderee += 8 * (moisIndice - 3);
         }
-        if (mois >= 4) {
-            proportionPonderee += 8;
-        }
-        if (mois >= 5) {
-            proportionPonderee += 8;
-        }
-        if (mois >= 6) {
-            proportionPonderee += 8;
-        }
-        if (mois >= 7) {
-            proportionPonderee += 8;
-        }
-        if (mois >= 8) {
-            proportionPonderee += 8;
-        }
-        if (mois >= 9) {
-            proportionPonderee += 8;
-        }
-        if (mois >= 10) {
-            proportionPonderee += 8;
-        }
-        if (mois >= 11) {
-            proportionPonderee += 8;
-        }
-        if (mois >= 12) {
-            proportionPonderee += 8;
-        }
-        return proportionPonderee / 12d / 10d;
+        
+        return proportionPonderee / 120.0; // Divisé par 12*10
     }
 
     public static LocalDate getPremierJourAnneeDeConges(LocalDate d) {
