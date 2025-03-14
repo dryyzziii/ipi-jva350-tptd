@@ -1,4 +1,4 @@
-package com.ipi.jva350.service.salarieaideadomicilemethode;
+package com.ipi.jva350.service.unit_test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
