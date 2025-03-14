@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.time.LocalDate;
 import java.util.stream.Stream;
 
-public class EntrepriseEstJourFerieTest {
+class EntrepriseEstJourFerieTest {
     
     // Méthode fournissant des données de test paramétrées
     static Stream<Arguments> joursFeriesProvider() {

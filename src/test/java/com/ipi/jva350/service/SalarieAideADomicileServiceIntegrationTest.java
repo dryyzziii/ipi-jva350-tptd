@@ -16,7 +16,7 @@ import com.ipi.jva350.repository.SalarieAideADomicileRepository;
 
 @SpringBootTest
 @Transactional
-public class SalarieAideADomicileServiceIntegrationTest {
+class SalarieAideADomicileServiceIntegrationTest {
 
     @Autowired
     private SalarieAideADomicileService salarieService;

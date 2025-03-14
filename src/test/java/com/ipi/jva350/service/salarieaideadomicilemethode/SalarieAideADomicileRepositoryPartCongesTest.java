@@ -13,7 +13,7 @@ import com.ipi.jva350.model.SalarieAideADomicile;
 import com.ipi.jva350.repository.SalarieAideADomicileRepository;
 
 @SpringBootTest
-public class SalarieAideADomicileRepositoryPartCongesTest {
+class SalarieAideADomicileRepositoryPartCongesTest {
 
     @Autowired
     private SalarieAideADomicileRepository salarieRepo;
@@ -25,7 +25,7 @@ public class SalarieAideADomicileRepositoryPartCongesTest {
     }
     
     @Test
-    public void testPartCongesPrisTotauxAnneeNMoins1AvecSalaries() {
+    void testPartCongesPrisTotauxAnneeNMoins1AvecSalaries() {
         // GIVEN (Arrange) : Création de salariés avec des congés acquis et pris
         // Salarié 1: a pris 15 jours sur 25 acquis (60%)
         SalarieAideADomicile salarie1 = new SalarieAideADomicile.Builder("Dupont", 
@@ -54,7 +54,7 @@ public class SalarieAideADomicileRepositoryPartCongesTest {
     }
     
     @Test
-    public void testPartCongesPrisTotauxAnneeNMoins1SansConges() {
+    void testPartCongesPrisTotauxAnneeNMoins1SansConges() {
         // GIVEN (Arrange) : Création de salariés sans congés pris
         SalarieAideADomicile salarie1 = new SalarieAideADomicile.Builder("Dupont", 
             LocalDate.of(2020, 1, 1), LocalDate.of(2023, 5, 1))
@@ -80,7 +80,7 @@ public class SalarieAideADomicileRepositoryPartCongesTest {
     }
     
     @Test
-    public void testPartCongesPrisTotauxAnneeNMoins1SansSalaries() {
+    void testPartCongesPrisTotauxAnneeNMoins1SansSalaries() {
         // WHEN (Act) : Calcul de la part des congés pris sans salariés en base
         Double partCongesPris = salarieRepo.partCongesPrisTotauxAnneeNMoins1();
         
